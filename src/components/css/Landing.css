@@ -1,0 +1,7 @@
+.landing {
+    background-image: url(../../images/bg4.jpg);
+    overflow: hidden;
+    overflow-y: hidden;
+    background-repeat: no-repeat;
+    background-size: cover;
+}

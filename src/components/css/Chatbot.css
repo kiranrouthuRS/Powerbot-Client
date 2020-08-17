@@ -1,0 +1,9 @@
+.chatbot {
+    border-radius: 15px;
+    box-shadow: -5px 5px 10px rgba(#ffffff, .5);
+}
+
+.header {
+    /* background-color: #7bccd6; */
+    margin-bottom: 2px;
+}
