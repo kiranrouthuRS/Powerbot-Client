@@ -315,7 +315,7 @@ class Chatbot extends Component {
     render() {
         if(!this.state.showBot) {
             return (
-                <div className='chatbot scale-transition' style={{minHeight: '520px', maxHeight: '500px', width: '30%', position: 'absolute', bottom: 80, right: 50, border: '1px solid lightgrey', backgroundColor: 'white'}}>
+                <div className='chatbot scale-transition' style={{minHeight: '75%', maxHeight: '75%', width: '30%', position: 'absolute', bottom: 80, right: 50, border: '1px solid lightgrey', backgroundColor: 'white'}}>
                     <nav className="header" style={{height: 80, borderTopLeftRadius: '15px', borderTopRightRadius: '15px',  backgroundColor: '#ffffff', display: "flex",justifyContent: "center",alignItems: "center", flexDirection: "column"}}>
                         <div style={{margin:-8}}>
                         <img src={bot2} alt="" className="waves-effect waves-light lighten-5" style={{width: '200px', height: '200px', margin: 0}} />
@@ -325,7 +325,7 @@ class Chatbot extends Component {
                         </div>
                     </nav>
                     <div style={{overflow: 'hidden'}}>
-                        <div id='chatbot' style={{height: 350, width:'99%', overflow: 'auto', scrollBehavior: 'smooth', overflowX: 'hidden'}}>
+                        <div id='chatbot' style={{height: '80%', width:'99%', overflow: 'auto', scrollBehavior: 'smooth', overflowX: 'hidden'}}>
                             {this.renderMessages(this.state.messages)}
                             <div ref={(el) =>{this.messageEnd = el;}}
                                 style={{float:'left', clear:'both'}}>
