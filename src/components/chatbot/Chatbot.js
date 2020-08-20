@@ -25,6 +25,8 @@ class Chatbot extends Component {
     constructor(props) {
         super(props);
         this._handleInputKeyPress = this._handleInputKeyPress.bind(this);
+        this._handleInputIconPress = this._handleInputIconPress.bind(this);
+        this._handleInputOnChange = this._handleInputOnChange.bind(this);
         this._handleQuickReplyPayload = this._handleQuickReplyPayload.bind(this);
         this._handleFileUpload = this._handleFileUpload.bind(this);
         this._handleFileUpload1 = this._handleFileUpload1.bind(this);
@@ -34,7 +36,9 @@ class Chatbot extends Component {
             messages: [],
             showBot: true,
             shopWelcomeSent: false,
-            selectedFile: null
+            selectedFile: null,
+            textEvent: '',
+            showTextArea: false,
         };
         if(cookies.get('userID') === undefined) {
             cookies.set('userID', uuid(), { path: '/'});
@@ -51,11 +55,13 @@ class Chatbot extends Component {
                     question: question,
                     text: queryText,
                     ip: systemPublicIp,
+                    location: window.location.origin,
                     sessionId: cookies.get('userID')
                 }
         };
         this.setState({messages: [...this.state.messages, says]})
         console.log(this.state.messages)
+        console.log(window.location.origin)
         const res = await axios.post('http://3.19.204.159:8000/client-form', says.msg);
         console.log(res.data, "text response Object");
         for(let msg of res.data) {
@@ -64,6 +70,11 @@ class Chatbot extends Component {
                 msg: msg
             };
             this.setState({messages: [...this.state.messages, says]});
+            if( msg.answer_type ==='TEXT'){
+                this.setState({showTextArea: true})
+            } else {
+                this.setState({showTextArea: false})
+            }
         }
     }
 
@@ -88,6 +99,11 @@ class Chatbot extends Component {
                     msg: msg
                 };
             this.setState({messages: [...this.state.messages, says]});
+            if( msg.answer_type ==='TEXT'){
+                this.setState({showTextArea: true})
+            } else {
+                this.setState({showTextArea: false})
+            }
         }
 
         console.log(this.state.messages)
@@ -107,7 +123,6 @@ class Chatbot extends Component {
         (async () => {
             await systemPublicIp;
         })();
-        console.log('mount method********')
  
     }
 
@@ -163,7 +178,8 @@ class Chatbot extends Component {
             message.msg.question &&
             message.msg.suggested_answers && message.msg.answer_type ==='TEXT') {
             return <Message key={i} speaks={message.speaks} text={message.msg.question} />
-        } else
+        } 
+        else
         if(message.msg && message.msg.question && !message.msg.suggested_answers) {
             return <Message key={i} speaks={message.speaks} text={message.msg.text} />
         } else if(message.msg && message.msg.text && message.msg.buttons && message.msg.images) {
@@ -253,14 +269,33 @@ class Chatbot extends Component {
     _handleInputKeyPress(e) {
         let question = this.state.messages.slice(-1)[0].msg.question;
         if(e.key === 'Enter') {
+            console.log(e.target.value)
             this.df_text_query(question ,e.target.value);
             e.target.value = '';
+            this.setState({textEvent: ''});
         }
+    }
+
+    _handleInputOnChange(e) {
+        if(e.target.value) {
+            this.setState({ textEvent: e.target.value})
+        }else {
+            e.target.value=''
+        }
+        
+    }
+
+    async _handleInputIconPress(){
+
+        let question = this.state.messages.slice(-1)[0].msg.question;
+        await this.df_text_query(question, this.state.textEvent);
+        this.setState({textEvent: ''})
     }
 
     _handleFileUpload(event) { 
         console.log(event.target.files[0]);
         this.setState({selectedFile: event.target.files[0] }); 
+        
     }
 
     _handleFileUpload1() {
@@ -280,13 +315,13 @@ class Chatbot extends Component {
     render() {
         if(!this.state.showBot) {
             return (
-                <div className='chatbot' style={{minHeight: '520px', maxHeight: '500px', width: '25%', position: 'absolute', bottom: 80, right: 50, border: '1px solid lightgrey', backgroundColor: 'white'}}>
+                <div className='chatbot scale-transition' style={{minHeight: '520px', maxHeight: '500px', width: '30%', position: 'absolute', bottom: 80, right: 50, border: '1px solid lightgrey', backgroundColor: 'white'}}>
                     <nav className="header" style={{height: 80, borderTopLeftRadius: '15px', borderTopRightRadius: '15px',  backgroundColor: '#ffffff', display: "flex",justifyContent: "center",alignItems: "center", flexDirection: "column"}}>
                         <div style={{margin:-8}}>
-                        <img src={bot2} alt="" className="waves-effect waves-light lighten-5" style={{width: '50px', height: '50px', margin: 0}} />
+                        <img src={bot2} alt="" className="waves-effect waves-light lighten-5" style={{width: '200px', height: '200px', margin: 0}} />
                         </div>
                         <div style={{margin:-27}}>
-                        <a href="/" className="black-text" style={{margin: 0}}>Roundbot</a>
+                        <a href="/" className="black-text" style={{margin: 0}}>-</a>
                         </div>
                     </nav>
                     <div style={{overflow: 'hidden'}}>
@@ -299,18 +334,20 @@ class Chatbot extends Component {
                         <div id='chatbot' style={{height: 30, width:'99%', overflow: 'auto', scrollBehavior: 'smooth', overflowX: 'hidden'}}>
                             {this.renderExtras(this.state.messages)}
                         </div>
-                        
+                        {this.state.showTextArea? <div>
                         <hr className="divider" style={{margin: 0, color: '#ff0000', backgroundColor: '#ff0000'}}></hr>
                         <div className="col s12" style={{display: "flex",justifyContent: "center",alignItems: "center",}}>
                             <div className= "col s10 input-container" style={{flexGrow: 3}}>
                                 <input type="text" style={{margin: 0, bottom: 0, paddingRight: '1%', paddingLeft: '1%', width: '98%',borderBottomStyle: 'none' }} 
-                                ref={(input)=>{this.textFocus = input;}} placeholder="Type Your Message"
-                                onKeyPress={this._handleInputKeyPress}/>
+                                ref={(input)=>{this.textFocus = input;}} placeholder="Type Your Message" value={this.state.textEvent}
+                                onKeyPress={this._handleInputKeyPress} onChange={this._handleInputOnChange}/>
                             </div>
                             <div className="col s2" style={{marginRight:10}}>
-                            <img src={send} alt="" className="waves-effect waves-light lighten-5" onClick={this._handleInputKeyPress} style={{width: '30px', height: '30px', margin: 0}} />
+                            <img src={send} alt="" className="waves-effect waves-light lighten-5" onClick={this._handleInputIconPress} style={{width: '30px', height: '30px', margin: 0}} />
                             </div>
                         </div>
+                        </div>:<div></div>}
+                        
                     </div>
                     <div className="fixed-action-btn">
                         <a className="waves-effect waves-light " onClick={this.hide} href="/#">

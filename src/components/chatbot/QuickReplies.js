@@ -43,7 +43,7 @@ class QuickReplies extends Component {
                             {this.props.text.stringValue}
                             </p>
                             }
-                            <div className=" col s10">
+                            <div className=" col s10 bubblebot" style={{display: "flex", flexWrap: 'wrap'}}>
                                 {this.renderQuickReplies(this.props.payload)}
                             </div>
                         </div>

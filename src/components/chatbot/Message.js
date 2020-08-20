@@ -9,7 +9,7 @@ const Message = (props) => {
             {/* <div className="card-panel grey lighten-5 z-depth-1"> */}
                 <div className="row valign-wrapper">
                     {props.speaks === 'bot' &&
-                    <div className="col s3" style={{marginLeft: '5px'}}>
+                    <div className="col s2" style={{marginLeft: '5px'}}>
                         <a className=" waves-effect waves-light" href='/#' style={{backgroundColor: '#ffffff', marginTop: 50}}><img src={bot1} alt="" style={{width: '40px', height: '40px', backgroundColor: '#ffffff', marginTop: 8}} /></a>
                     </div>
                     }
@@ -17,7 +17,7 @@ const Message = (props) => {
                         {props.speaks === 'bot' &&
                             <div className="left-align">
                                 <p className="bubblebot hoverable lighten-5 z-depth-1">
-                                <span className="white-text ">
+                                <span className="red-text ">
                                     {props.text}
                                 </span>
                                 </p>
@@ -26,14 +26,14 @@ const Message = (props) => {
                         {props.speaks === 'me' &&
                             <div className="right-align ">
                                 <p className="">
-                                <span className="white-text bubble hoverable lighten-5 z-depth-1">
+                                <span className="black-text bubbleme hoverable lighten-5 z-depth-1">
                                     {props.text}
                                 </span></p>
                             </div>
                         }
                     </div>
                     {props.speaks === 'me' &&
-                    <div className="col s3">
+                    <div className="col s2">
                         <a className="waves-effect waves-light" href='/#' style={{backgroundColor: '#ffffff', marginTop: 50}}><img src={bot5} alt="" style={{width: '20px', height: '30px', backgroundColor: '#ffffff', marginTop: 8}} /></a>
                     </div>
                     }
