@@ -11,11 +11,14 @@ import '../css/Chatbot.css';
 import bot1 from '../../images/Bottom_right_logo.png';
 import send from '../../images/Send_Btn.png';
 import bot2 from '../../images/during_chat.png';
-import publicIp from 'public-ip';
+// import publicIp from 'public-ip';
+import LocalIPUrl from 'local-ip-url';
 
 const cookies = new Cookies();
 // const systemIp = localIpUrl ('private');
-const systemPublicIp = publicIp.v4();
+// const systemPublicIp = async () => {
+//     return await publicIp.v4();
+// } 
 
 
 class Chatbot extends Component {
@@ -44,6 +47,7 @@ class Chatbot extends Component {
             cookies.set('userID', uuid(), { path: '/'});
         }
         // console.log(cookies.get('userID'))
+
     }
 
     async df_text_query(question, queryText) {
@@ -54,7 +58,7 @@ class Chatbot extends Component {
                     bot_id: 1,
                     question: question,
                     text: queryText,
-                    ip: "192.168.0.101",
+                    ip: LocalIPUrl('public', 'ipv4'),
                     location: window.location.origin,
                     sessionId: cookies.get('userID')
                 }
@@ -62,7 +66,7 @@ class Chatbot extends Component {
         this.setState({messages: [...this.state.messages, says]})
         // console.log(this.state.messages)
         // console.log(window.location.origin)
-        console.log(systemPublicIp);
+        console.log(LocalIPUrl);
         const res = await axios.post('http://18.221.57.172:8000/client-form', says.msg);
         console.log(res.data, "text response Object");
         for(let msg of res.data) {
@@ -87,12 +91,12 @@ class Chatbot extends Component {
                     bot_id: 1,
                     question: question,
                     text: eventName,
-                    ip: "192.168.0.101",
+                    ip: LocalIPUrl('public', 'ipv4'),
                     sessionId: cookies.get('userID')
                 }
         };
         console.log(says.msg)
-        console.log(systemPublicIp.value);
+        console.log(LocalIPUrl('private'))
         const res = await axios.post('http://18.221.57.172:8000/client-form', says.msg);
         console.log(res.data, "event response Object");
         for(let msg of res.data) {
@@ -122,10 +126,6 @@ class Chatbot extends Component {
 
     async componentDidMount() {
         this.df_event_query('welcome', 'yes');
-        (async () => {
-            await systemPublicIp;
-        })();
- 
     }
 
     componentDidUpdate() {
