@@ -54,15 +54,16 @@ class Chatbot extends Component {
                     bot_id: 1,
                     question: question,
                     text: queryText,
-                    ip: systemPublicIp,
+                    ip: "192.168.0.101",
                     location: window.location.origin,
                     sessionId: cookies.get('userID')
                 }
         };
         this.setState({messages: [...this.state.messages, says]})
-        console.log(this.state.messages)
-        console.log(window.location.origin)
-        const res = await axios.post('http://3.19.204.159:8000/client-form', says.msg);
+        // console.log(this.state.messages)
+        // console.log(window.location.origin)
+        console.log(systemPublicIp);
+        const res = await axios.post('http://18.221.57.172:8000/client-form', says.msg);
         console.log(res.data, "text response Object");
         for(let msg of res.data) {
             says = {
@@ -86,12 +87,13 @@ class Chatbot extends Component {
                     bot_id: 1,
                     question: question,
                     text: eventName,
-                    ip: systemPublicIp,
+                    ip: "192.168.0.101",
                     sessionId: cookies.get('userID')
                 }
         };
         console.log(says.msg)
-        const res = await axios.post('http://3.19.204.159:8000/client-form', says.msg);
+        console.log(systemPublicIp.value);
+        const res = await axios.post('http://18.221.57.172:8000/client-form', says.msg);
         console.log(res.data, "event response Object");
         for(let msg of res.data) {
             let says = {
