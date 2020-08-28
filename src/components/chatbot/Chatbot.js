@@ -328,16 +328,12 @@ class Chatbot extends Component {
                         </div>
                     </nav>
                     <div style={{overflow: 'hidden'}}>
-                        <div id='chatbot' style={{height: 340, width:'99%', overflow: 'auto', scrollBehavior: 'smooth', overflowX: 'hidden'}}>
+                        <div id='chatbot' style={{height: 400, width:'99%', overflow: 'auto', scrollBehavior: 'smooth', overflowX: 'hidden'}}>
                             {this.renderMessages(this.state.messages)}
                             <div ref={(el) =>{this.messageEnd = el;}}
                                 style={{float:'left', clear:'both'}}>
                             </div>
-                        </div>
-                        <div id='chatbot' style={{height: 30, width:'99%', overflow: 'auto', scrollBehavior: 'smooth', overflowX: 'hidden'}}>
-                            {this.renderExtras(this.state.messages)}
-                        </div>
-                        {this.state.showTextArea? <div>
+                            {this.state.showTextArea? <div>
                         <hr className="divider" style={{margin: 0, color: '#ff0000', backgroundColor: '#ff0000'}}></hr>
                         <div className="col s12" style={{display: "flex",justifyContent: "center",alignItems: "center",}}>
                             <div className= "col s10 input-container" style={{flexGrow: 3}}>
@@ -351,6 +347,11 @@ class Chatbot extends Component {
                         </div>
                         </div>:<div></div>}
                         
+                        </div>
+                        {/* <div id='chatbot' style={{height: 30, width:'99%', overflow: 'auto', scrollBehavior: 'smooth', overflowX: 'hidden'}}>
+                            {this.renderExtras(this.state.messages)}
+                        </div> */}
+                    
                     </div>
                     <div className="fixed-action-btn">
                         <a className="waves-effect waves-light " onClick={this.hide} href="/#">
